@@ -277,6 +277,10 @@ form {
     transform: none;
 }
 
+.submit-button.is-loading .button-arrow {
+    animation: pulse 900ms ease-in-out infinite alternate;
+}
+
 .button-arrow {
     display: grid;
     width: 32px;
@@ -302,6 +306,13 @@ form {
 
 .form-status.is-success {
     color: #36772b;
+}
+
+@keyframes pulse {
+    to {
+        opacity: 0.45;
+        transform: scale(0.9);
+    }
 }
 
 @media (max-width: 900px) {
