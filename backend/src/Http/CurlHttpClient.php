@@ -20,27 +20,31 @@ final class CurlHttpClient implements HttpClient
             throw new AmoCrmException('Failed to initialize an amoCRM request.');
         }
 
-        curl_setopt_array($handle, [
+        $options = [
             CURLOPT_CUSTOMREQUEST => $method,
             CURLOPT_HTTPHEADER => $headers,
             CURLOPT_POSTFIELDS => $body,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_FOLLOWLOCATION => false,
-            CURLOPT_CONNECTTIMEOUT => 5,
-            CURLOPT_TIMEOUT => 15,
+            CURLOPT_CONNECTTIMEOUT => 15,
+            CURLOPT_TIMEOUT => 30,
             CURLOPT_PROTOCOLS => CURLPROTO_HTTPS,
-        ]);
+        ];
+
+        if (PHP_OS_FAMILY === 'Windows' && defined('CURLSSLOPT_NATIVE_CA')) {
+            $options[CURLOPT_SSL_OPTIONS] = CURLSSLOPT_NATIVE_CA;
+        }
+
+        curl_setopt_array($handle, $options);
 
         $responseBody = curl_exec($handle);
 
         if ($responseBody === false) {
             $error = curl_error($handle);
-            curl_close($handle);
             throw new AmoCrmException('amoCRM request failed: ' . $error);
         }
 
         $statusCode = (int) curl_getinfo($handle, CURLINFO_RESPONSE_CODE);
-        curl_close($handle);
 
         return new HttpResponse($statusCode, $responseBody);
     }

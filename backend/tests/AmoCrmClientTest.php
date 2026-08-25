@@ -61,7 +61,7 @@ function assertSameValue(mixed $expected, mixed $actual): void
 test('creates a complex lead and returns its ID', static function (): void {
     $httpClient = new FakeHttpClient(new HttpResponse(
         200,
-        '{"_embedded":{"leads":[{"id":54886}]}}',
+        '[{"id":54886,"contact_id":19663157,"merged":false}]',
     ));
     $client = new AmoCrmClient(
         new AmoCrmConfig('https://example.amocrm.ru', 'secret-token'),

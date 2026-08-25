@@ -57,7 +57,7 @@ final readonly class AmoCrmClient
             throw new AmoCrmException('amoCRM returned invalid JSON.', previous: $exception);
         }
 
-        $leadId = $responseData['_embedded']['leads'][0]['id'] ?? null;
+        $leadId = $responseData[0]['id'] ?? null;
 
         if (!is_int($leadId)) {
             throw new AmoCrmException('amoCRM response does not contain a lead ID.');
