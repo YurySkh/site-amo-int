@@ -9,3 +9,39 @@ Test assignment: a lead form that creates a contact and a linked deal in amoCRM,
 
 Implementation and deployment instructions will be added as the project evolves.
 
+## Local development
+
+### Frontend
+
+Serve the `frontend/` directory at `http://127.0.0.1:4173` with any static file server.
+
+### Backend
+
+The API requires PHP 8.5 with the `mbstring` extension:
+
+```bash
+cd backend
+php -S 127.0.0.1:8080 -t public router.php
+```
+
+Alternatively, run it with Docker:
+
+```bash
+docker build -t site-amo-backend ./backend
+docker run --rm -p 8080:8080 \
+  -e ALLOWED_ORIGIN=http://127.0.0.1:4173 \
+  site-amo-backend
+```
+
+The current endpoint validates and normalizes requests without sending them to amoCRM:
+
+```text
+POST http://127.0.0.1:8080/api/leads
+GET  http://127.0.0.1:8080/health
+```
+
+Run the dependency-free validation tests with:
+
+```bash
+php backend/tests/LeadRequestValidatorTest.php
+```
