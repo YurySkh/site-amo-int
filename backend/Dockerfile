@@ -1,7 +1,8 @@
 FROM php:8.5-cli-alpine
 
-RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS oniguruma-dev \
-    && docker-php-ext-install mbstring \
+RUN apk add --no-cache libcurl oniguruma \
+    && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS curl-dev oniguruma-dev \
+    && docker-php-ext-install curl mbstring \
     && apk del .build-deps
 
 WORKDIR /app
