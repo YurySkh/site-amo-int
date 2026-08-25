@@ -6,6 +6,7 @@
     <meta name="description" content="Форма заявки с интеграцией amoCRM и Roistat">
     <title>Новая заявка</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
 </head>
 <body>
     <main class="page-shell">
@@ -36,7 +37,7 @@
                 <p>Обязательное поле отмечено звёздочкой.</p>
             </div>
 
-            <form id="lead-form" novalidate>
+            <form id="lead-form">
                 <div class="field">
                     <label for="name">Имя</label>
                     <input
@@ -68,7 +69,6 @@
                         name="phone"
                         type="text"
                         inputmode="numeric"
-                        minlength="5"
                         maxlength="15"
                         autocomplete="tel"
                         aria-describedby="phone-hint phone-error"
