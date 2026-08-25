@@ -72,7 +72,7 @@ try {
         'errors' => $exception->errors(),
     ], $exception->statusCode());
 } catch (AmoCrmException $exception) {
-    error_log($exception->__toString());
+    error_log('amoCRM integration error: ' . $exception->getMessage());
 
     JsonResponse::send([
         'success' => false,
