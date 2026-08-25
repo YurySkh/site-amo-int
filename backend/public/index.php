@@ -6,6 +6,7 @@ use App\Http\ApiException;
 use App\Http\Cors;
 use App\Http\JsonRequest;
 use App\Http\JsonResponse;
+use App\Validation\LeadRequestValidator;
 
 require dirname(__DIR__) . '/bootstrap.php';
 
@@ -27,13 +28,17 @@ try {
     }
 
     if ($method === 'POST' && $path === '/api/leads') {
-        JsonRequest::body();
+        $lead = LeadRequestValidator::validate(JsonRequest::body());
 
         JsonResponse::send([
             'success' => true,
-            'message' => 'Request accepted for validation.',
+            'message' => 'Payload validated successfully.',
             'mode' => 'validation_only',
-        ], 202);
+            'meta' => [
+                'timeOnSiteOver30' => $lead->timeOnSiteOver30,
+                'hasRoistatVisit' => $lead->roistatVisit !== '',
+            ],
+        ]);
     }
 
     throw new ApiException(404, 'Endpoint not found.');
