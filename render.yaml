@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: site-amo-api
+    runtime: docker
+    plan: free
+    region: frankfurt
+    branch: main
+    autoDeployTrigger: commit
+    dockerContext: ./backend
+    dockerfilePath: ./backend/Dockerfile
+    healthCheckPath: /health
+    envVars:
+      - key: ALLOWED_ORIGIN
+        sync: false
+      - key: AMOCRM_BASE_URL
+        sync: false
+      - key: AMOCRM_ACCESS_TOKEN
+        sync: false
+
