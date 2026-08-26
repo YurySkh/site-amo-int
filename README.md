@@ -59,8 +59,44 @@ For a local Docker run with amoCRM enabled:
 docker run --rm -p 8080:8080 --env-file backend/.env site-amo-backend
 ```
 
-Run the dependency-free validation tests with:
+Run the dependency-free backend tests with:
 
 ```bash
 php backend/tests/LeadRequestValidatorTest.php
+php backend/tests/AmoCrmPayloadFactoryTest.php
+php backend/tests/AmoCrmClientTest.php
 ```
+
+## Render deployment
+
+The repository includes a `render.yaml` Blueprint for a Docker web service. It:
+
+- builds `backend/Dockerfile` with `backend/` as the Docker context;
+- starts the PHP API on Render's `PORT` and binds to `0.0.0.0`;
+- checks application health through `GET /health`;
+- deploys the `main` branch automatically;
+- requests secret environment values during the initial Blueprint setup.
+
+Create a new Blueprint in Render from this GitHub repository and provide these values when prompted:
+
+```dotenv
+ALLOWED_ORIGIN=https://your-netlify-site.netlify.app
+AMOCRM_BASE_URL=https://your-account.amocrm.ru
+AMOCRM_ACCESS_TOKEN=your_long_lived_token
+```
+
+Do not add `PORT`: Render provides it automatically. Do not commit production values to `render.yaml` or any `.env` file.
+
+After the first successful deploy, verify:
+
+```text
+GET https://your-service.onrender.com/health
+```
+
+The expected response is:
+
+```json
+{"success":true,"status":"ok"}
+```
+
+Finally, set `frontend/config.js` to the deployed backend URL with `/api/leads`. If the Netlify URL changes, update `ALLOWED_ORIGIN` in the Render dashboard.
