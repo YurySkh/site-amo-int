@@ -1,3 +1,3 @@
 window.APP_CONFIG = Object.freeze({
-    apiUrl: "http://localhost:8080/api/leads",
+    apiUrl: "https://site-amo-api.onrender.com/api/leads",
 });
