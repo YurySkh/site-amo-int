@@ -70,11 +70,22 @@ const setSubmitting = (isSubmitting) => {
     submitButtonLabel.textContent = isSubmitting ? "Отправляем…" : "Отправить заявку";
 };
 
+const getCookieValue = (name) => {
+    const prefix = `${name}=`;
+    const cookie = document.cookie
+        .split(";")
+        .map((item) => item.trim())
+        .find((item) => item.startsWith(prefix));
+
+    return cookie ? cookie.slice(prefix.length) : "";
+};
+
 const buildPayload = () => ({
     name: nameInput.value,
     email: emailInput.value,
     phone: phoneInput.value,
     price: priceInput.value,
+    roistatVisit: getCookieValue("roistat_visit") || "nocookie",
     timeOnSiteOver30: timeOnSiteOver30 || performance.now() - pageOpenedAt > 30_000,
 });
 
