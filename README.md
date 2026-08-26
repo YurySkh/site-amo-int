@@ -33,11 +33,30 @@ docker run --rm -p 8080:8080 \
   site-amo-backend
 ```
 
-The current endpoint validates and normalizes requests without sending them to amoCRM:
+The backend exposes these endpoints:
 
 ```text
 POST http://127.0.0.1:8080/api/leads
 GET  http://127.0.0.1:8080/health
+```
+
+## amoCRM configuration
+
+This project uses an amoCRM long-lived access token, which is intended for small integrations connected to a specific account. Create `backend/.env` from `backend/.env.example` and provide:
+
+```dotenv
+AMOCRM_BASE_URL=https://your-account.amocrm.ru
+AMOCRM_ACCESS_TOKEN=your_long_lived_token
+```
+
+Never commit `backend/.env` or copy its token into frontend code. On Render, configure the same values as environment variables.
+
+When both amoCRM variables are present, `POST /api/leads` creates a deal and its linked contact through `POST /api/v4/leads/complex`. Without them, the local endpoint stays in `validation_only` mode and performs no external request.
+
+For a local Docker run with amoCRM enabled:
+
+```bash
+docker run --rm -p 8080:8080 --env-file backend/.env site-amo-backend
 ```
 
 Run the dependency-free validation tests with:
